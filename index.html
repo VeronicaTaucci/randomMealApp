@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I'm so hungry</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="main">
+    <h1>I'm so hungry</h1>
+    <button type="button" class="getRandomMeal btn btn-light btn-outline-dark"><span class="material-symbols-outlined">cookie</span>Search Random Meal</button>
+    </div>
+    <div class="appendMealToDiv">
+    </div>
+<style>
+.mealDiv{
+    width: 80vw;
+    display: flex;
+    justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+    margin: auto;
+    }
+.dishName{
+    position: relative;
+    left: 40%;
+    font-family: 'Montserrat', sans-serif;
+}
+.main{
+    font-family: 'Open Sans', sans-serif;
+    margin: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+img,iframe{
+    padding: 20px;
+}
+</style>
+</body>
+
+<script>
+    let appendMealToDiv= document.querySelector('.appendMealToDiv')
+    let getRandomMeal = document.querySelector('.getRandomMeal')
+    getRandomMeal.addEventListener('click',async ()=>{
+        let result =await fetch('https://www.themealdb.com/api/json/v1/1/random.php')
+        let data = await result.json()
+        let meal = data.meals[0]
+    createMeal(meal)
+    })
+
+const createMeal = (meal) => {
+    let ingredients = {}
+        for (let i=1; i<= 20; i++){
+        ingredients[meal[`strIngredient${i}`]] = meal[`strMeasure${i}`]
+    }
+    console.log(ingredients)
+    let innerIngredients = ''
+    for (var key in ingredients) {
+        if(key != null && key.length>0){
+            innerIngredients += `<li class="list-group-item">${[key]} - ${ingredients[key]}</li> `
+        }
+    }
+    console.log(innerIngredients)
+    let innerHtmlMeal = `
+<h1 class='dishName'>Let's cook: <b>${meal.strMeal}</b></h1>
+<div class='mealDiv' >
+    <div class="card" style="width: 28rem;">
+        <ul class="list-group list-group-flush">
+            ${innerIngredients}
+            <img src="${meal.strMealThumb}" class="card-img-top" alt="...">
+        </ul>
+    </div>
+    <div class="card" style="width: 40rem;">
+        <iframe height="315" src="https://www.youtube.com/embed/${meal.strYoutube.slice(-11)}"> </iframe>
+        <div class="card-body">
+            <ul class="list-group list-group-flush"  >
+                <li class="list-group-item">Category:${meal.strCategory}</li>
+                <li class="list-group-item">Area:${meal.strArea}</li>
+                <li class="list-group-item"><p  class="card-text">${meal.strInstructions}</p></li>
+            </ul>
+        </div>
+    </div>
+</div>
+`
+appendMealToDiv.innerHTML = innerHtmlMeal
+}
+</script>
+</html>
