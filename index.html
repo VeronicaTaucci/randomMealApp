@@ -28,8 +28,11 @@
     margin: auto;
     }
 .dishName{
-    position: relative;
-    left: 40%;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    /* position: relative;
+    left: 40%; */
     font-family: 'Montserrat', sans-serif;
 }
 .main{
@@ -69,24 +72,32 @@ const createMeal = (meal) => {
     }
     console.log(innerIngredients)
     let innerHtmlMeal = `
-<h1 class='dishName'>Let's cook: <b>${meal.strMeal}</b></h1>
-<div class='mealDiv' >
-    <div class="card" style="width: 28rem;">
+<h1 class='dishName'>Let's cook: ${meal.strMeal}</h1>
+
+
+<div class='mealDiv container-fluid' >
+<div class="row">
+  <div class="col-12 col-md-4">
+    <div class="card">
         <ul class="list-group list-group-flush">
             ${innerIngredients}
             <img src="${meal.strMealThumb}" class="card-img-top" alt="...">
         </ul>
     </div>
-    <div class="card" style="width: 40rem;">
+    </div>
+  <div class="col-12 col-md-8">
+    <div class="card">
         <iframe height="315" src="https://www.youtube.com/embed/${meal.strYoutube.slice(-11)}"> </iframe>
         <div class="card-body">
             <ul class="list-group list-group-flush"  >
-                <li class="list-group-item">Category:${meal.strCategory}</li>
-                <li class="list-group-item">Area:${meal.strArea}</li>
-                <li class="list-group-item"><p  class="card-text">${meal.strInstructions}</p></li>
+                <li class="list-group-item">Category: ${meal.strCategory}</li>
+                <li class="list-group-item">Area: ${meal.strArea}</li>
+                <li class="list-group-item"><p  class="card-text"> ${meal.strInstructions}</p></li>
             </ul>
         </div>
     </div>
+    </div>
+</div>
 </div>
 `
 appendMealToDiv.innerHTML = innerHtmlMeal
